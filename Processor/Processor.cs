@@ -8,7 +8,7 @@ namespace Proc
 {
     public class Processor : IProccesor
     {
-        public static readonly List<string> Registers = new List<string>{"EAX", "EBX", "ECX", "EDX", "EFX", "EGX", "ESX", "EPX", "INP", "DRF", "STE", "CRF" };
+        public static readonly List<string> Registers = new List<string>{"EAX", "EBX", "ECX", "EDX", "EFX", "EGX", "ESX", "EPX", "INP", "RET", "DRF", "STE", "CRF" };
         IMemoryDevice memoryDevice;
         int StackSize;
 
@@ -37,11 +37,21 @@ namespace Proc
             RegisterOfProcessor[Register] = memoryDevice.GetCell(memory);
         }
 
+        public void Load(string first, string second)
+        {
+            RegisterOfProcessor[first] = memoryDevice.GetCell(RegisterOfProcessor[second]);
+        }
+
         public void SetMemoryStorage(IMemoryDevice memoryDevice) => this.memoryDevice = memoryDevice;
 
         public void Store(string Register, int memory)
         {
             memoryDevice.SetCell(memory, RegisterOfProcessor[Register]);
+        }
+
+        public void Store(string fisrt, string second)
+        {
+            memoryDevice.SetCell(RegisterOfProcessor[second], RegisterOfProcessor[fisrt]);
         }
 
         #region Система комманд процессора
@@ -84,6 +94,17 @@ namespace Proc
 
         public void MOV(string first, int data) => RegisterOfProcessor[first] = data;
         public void MOV(string first, string second) => RegisterOfProcessor[first] = RegisterOfProcessor[second];
+
+        public void CMP(string first, string second)
+        {
+            int res = RegisterOfProcessor[first] - RegisterOfProcessor[second];
+            if (res > 0)
+                RegisterOfProcessor["CRF"] = 1;
+            else if (res == 0)
+                RegisterOfProcessor["CRF"] = 0;
+            else
+                RegisterOfProcessor["CRF"] = -1;
+        }
         #endregion
     }
 }

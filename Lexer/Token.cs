@@ -1,7 +1,7 @@
 ﻿
 namespace Lexer
 {
-    public enum TokenType { DATA, OPERATOR, REGISTR, NONE };
+    public enum TokenType { DATA, OPERATOR, REGISTR, LABEL, LABELTO, NONE};
 
 
     public class Token
