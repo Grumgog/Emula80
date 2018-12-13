@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace Proc
 {
@@ -13,5 +14,6 @@ namespace Proc
         void SetMemoryStorage(IMemoryDevice memoryDivece);
         void Store(string register, int memory);
         void Load(string register, int memory);
+        ObservableCollection<int> getFlatPresentOfMemory();
     }
 }

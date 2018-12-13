@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lexer", "Lexer\Lexer.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{AEB513ED-DB51-4F62-BBFD-39720F9FC2D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevEmula80", "DevEmula80\DevEmula80.csproj", "{F366F67D-6E3D-4FCB-8D38-B869D79E427C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{AEB513ED-DB51-4F62-BBFD-39720F9FC2D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEB513ED-DB51-4F62-BBFD-39720F9FC2D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEB513ED-DB51-4F62-BBFD-39720F9FC2D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F366F67D-6E3D-4FCB-8D38-B869D79E427C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F366F67D-6E3D-4FCB-8D38-B869D79E427C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F366F67D-6E3D-4FCB-8D38-B869D79E427C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F366F67D-6E3D-4FCB-8D38-B869D79E427C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

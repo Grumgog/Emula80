@@ -65,4 +65,6 @@ namespace Lexer
 
         public List<Token> Process(string text) => Tokenize(Divide(text));
     }
+
+   
 }
