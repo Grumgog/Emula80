@@ -86,7 +86,7 @@ namespace Proc
         /// <returns>Новое значение указателя на инструкцию</returns>
         public int Step(List<Token> stream, int i)
         {
-            proc.RegisterOfProcessor.ToList().Find(el => el.Key == "CRF").Value = i;
+            proc.RegisterOfProcessor.ToList().Find(el => el.Key == "IAR").Value = i;
             proc.UpdateReg();// Заносим номер исполняемого оператора в регистор хранения адреса комманды
             if (stream[i].Type == TokenType.OPERATOR)
             {
@@ -219,6 +219,8 @@ namespace Proc
                         if (newpos != -1)
                             i = newpos;
                     }
+                    else
+                        i += 2;
                 }
                 else if (string.Compare(stream[i].Value, "JLT", true) == 0)
                 {
@@ -228,6 +230,8 @@ namespace Proc
                         if (newpos != -1)
                             i = newpos;
                     }
+                    else
+                        i += 2;
                 }
                 else if (string.Compare(stream[i].Value, "JEQ", true) == 0)
                 {
@@ -237,6 +241,8 @@ namespace Proc
                         if (newpos != -1)
                             i = newpos;
                     }
+                    else
+                        i += 2;
                 }
                 else if (string.Compare(stream[i].Value, "JGE", true) == 0)
                 {
@@ -246,6 +252,8 @@ namespace Proc
                         if (newpos != -1)
                             i = newpos;
                     }
+                    else
+                        i += 2;
                 }
                 else if (string.Compare(stream[i].Value, "JLE", true) == 0)
                 {
@@ -255,6 +263,8 @@ namespace Proc
                         if (newpos != -1)
                             i = newpos;
                     }
+                    else
+                        i += 2;
                 }
                 else if (string.Compare(stream[i].Value, "JNE", true) == 0)
                 {
@@ -264,6 +274,8 @@ namespace Proc
                         if (newpos != -1)
                             i = newpos;
                     }
+                    else
+                        i += 2;
                 }
                 else if (string.Compare(stream[i].Value, "PROC", true) == 0)
                 {

@@ -60,7 +60,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <TextBox TextWrapping="Wrap" Text="{Binding ProgramText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" ScrollViewer.HorizontalScrollBarVisibility ="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <TextBox FontSize="14" TextWrapping="Wrap" Text="{Binding ProgramText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" ScrollViewer.HorizontalScrollBarVisibility ="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
                 
             </TextBox>
             <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">

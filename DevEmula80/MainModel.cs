@@ -7,6 +7,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Windows.Documents;
 using System.Windows;
+using System.Threading;
 using Proc;
 using Lexer;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -20,6 +21,7 @@ namespace DevEmula80
         private VirtualMachine VirtualMachine;
         private List<Token> Tokens;
         private int CommandPointer;
+        ExecuteThread executeThread;
         #endregion
 
         #region Данные и их аксессоры
@@ -208,14 +210,14 @@ namespace DevEmula80
                     Tokens = analizator.Process(ProgramText);
                     Tokens = Tokens.FindAll(el => el.Type != TokenType.NONE);
                 } 
-                //try
-                //{
-                    VirtualMachine.Execute(Tokens);
-                //}
-                //catch(Exception e)
-                //{
-                 //   RunMessage = e.Message;
-                //}
+                try
+                {
+                    executeThread = new ExecuteThread(VirtualMachine, Tokens);
+                }
+                catch(Exception e)
+                {
+                   RunMessage = e.Message;
+                }
                 AllExecute = false;
                 OnPropertyChanged("RegMem");
                 OnPropertyChanged("MemoryState");
@@ -260,6 +262,16 @@ namespace DevEmula80
         {
             get => _RunStop ?? (_RunStop = new LocalCommand(obj =>
             {
+                try
+                {
+                    if (AllExecute)
+                        executeThread.thread.Abort();
+                }
+                catch
+                {
+                    RunMessage += "Работа программы была завершенна принудительно\n";
+                }
+                
                 StepExecute = AllExecute = false;
                 CommandPointer = 0;
                 RunMessage += "Программа завершила выполнение\n";
@@ -361,5 +373,25 @@ namespace DevEmula80
         {
             this.execute(parameter);
         }
+    }
+
+    class ExecuteThread
+    {
+        public Thread thread { get; set; }
+        VirtualMachine vm;
+        public ExecuteThread(VirtualMachine vm, List<Token> t)
+        {
+            this.vm = vm;
+            thread = new Thread(this.func);
+            thread.Name = "ExecuteAll";
+            thread.Start(t);
+        }
+
+        void func(object info)
+        {
+            var s = info as List<Token>;
+            vm.Execute(s);
+        }
+
     }
 }
