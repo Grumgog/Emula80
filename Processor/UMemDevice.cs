@@ -13,6 +13,10 @@ namespace Proc
          
         public ObservableCollection<int> FlatMemory { get; set; } // simple flat model of memory
 
+        public int Addres => -1; // Устоойство памяти (поэтому -1)
+
+        public int[] InMem => FlatMemory.ToArray();
+
         public UsualMemoryDevice(int size)
         {
             FlatMemory = new ObservableCollection<int>();

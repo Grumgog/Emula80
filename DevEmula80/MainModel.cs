@@ -195,7 +195,6 @@ namespace DevEmula80
         }
         // Команды справки
         private LocalCommand _About;
-        private LocalCommand _ShortInfo;
         private LocalCommand _HelpSystem;
         // Команды исполнения
         private LocalCommand _RunAll;
@@ -206,17 +205,18 @@ namespace DevEmula80
                 AllExecute = true;
                 if(Tokens == null) // Если токенов не было или текст программы был изменен...
                 {
-                    Analizator analizator = new Analizator(new SimpleDivider(), new SimpleTokenizer());
+                    Analizator analizator = new Analizator(new EmuDivider(), new EmuTokenizer());
                     Tokens = analizator.Process(ProgramText);
                     Tokens = Tokens.FindAll(el => el.Type != TokenType.NONE);
                 } 
                 try
                 {
-                    executeThread = new ExecuteThread(VirtualMachine, Tokens);
+                    executeThread = new ExecuteThread(VirtualMachine, Tokens, this);
                 }
                 catch(Exception e)
                 {
                    RunMessage = e.Message;
+                    RunStop.execute(null);
                 }
                 AllExecute = false;
                 OnPropertyChanged("RegMem");
@@ -232,7 +232,7 @@ namespace DevEmula80
                 
                 if (Tokens == null)
                 {
-                    Analizator analizator = new Analizator(new SimpleDivider(), new SimpleTokenizer());
+                    Analizator analizator = new Analizator(new EmuDivider(), new EmuTokenizer());
                     Tokens = analizator.Process(ProgramText);
                     Tokens = Tokens.FindAll(el => el.Type != TokenType.NONE);
                 }
@@ -271,7 +271,6 @@ namespace DevEmula80
                 {
                     RunMessage += "Работа программы была завершенна принудительно\n";
                 }
-                
                 StepExecute = AllExecute = false;
                 CommandPointer = 0;
                 RunMessage += "Программа завершила выполнение\n";
@@ -333,7 +332,7 @@ namespace DevEmula80
 
         public MainModel()
         {
-            VirtualMachine = new VirtualMachine(new Processor());
+            VirtualMachine = new VirtualMachine(new Proc.Processor());
             _ProgramText = _RunMessage = "";
             FileName = "";
             NewDocumentState = true;
@@ -379,18 +378,30 @@ namespace DevEmula80
     {
         public Thread thread { get; set; }
         VirtualMachine vm;
-        public ExecuteThread(VirtualMachine vm, List<Token> t)
+        MainModel m;
+        public ExecuteThread(VirtualMachine vm, List<Token> t, MainModel main)
         {
             this.vm = vm;
             thread = new Thread(this.func);
             thread.Name = "ExecuteAll";
             thread.Start(t);
+            m = main;
         }
 
         void func(object info)
         {
             var s = info as List<Token>;
-            vm.Execute(s);
+            try
+            {
+                App.Current.Dispatcher.Invoke(()=>vm.Execute(s));
+            }
+            catch(Exception e)
+            {
+                m.RunMessage += e.Message; 
+                //m.AbortProgramm(); // <- Добавить код для возращение в исходное состояние
+            }
+           
+            //vm.Execute(s);
         }
 
     }

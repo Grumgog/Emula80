@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 
 namespace Proc
@@ -22,7 +17,9 @@ namespace Proc
     
     public class Processor : IProccesor
     {
-        public static readonly List<string> Registers = new List<string>{"EAX", "EBX", "ECX", "EDX", "EFX", "EGX", "ESX", "EPX", "INP", "RET", "DRF", "STE", "CRF", "IAR" };
+        public static readonly List<string> Registers = new List<string>{"EAX", "EBX", "ECX", "EDX", "EFX", "EGX",
+                                                                         "ESX", "EPX", "INP", "RET", "DRF", "STE",
+                                                                         "CRF", "IAR" };
         IMemoryDevice memoryDevice;
         int StackSize;
 

@@ -1,45 +1,45 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="Proc.SimpleTokenizer" BaseTypeListCollapsed="true">
-    <Position X="2.75" Y="1.25" Width="1.5" />
+  <Class Name="Proc.EmuTokenizer" BaseTypeListCollapsed="true">
+    <Position X="5" Y="4.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>VirtualMachine.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
-  <Class Name="Proc.SimpleDivider" BaseTypeListCollapsed="true">
-    <Position X="0.5" Y="1.25" Width="1.5" />
+  <Class Name="Proc.EmuDivider" BaseTypeListCollapsed="true">
+    <Position X="6.5" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
       <FileName>VirtualMachine.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Proc.VirtualMachine">
-    <Position X="6.75" Y="1.25" Width="1.5" />
+    <Position X="6.75" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAgAQAAAAAAAAAAAAAAAAAIAAgAAACAAA=</HashCode>
+      <HashCode>AAAIAAAAAAAAgAQAAAAAACAAAAAAAAAAIAAgAAACAAA=</HashCode>
       <FileName>VirtualMachine.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Proc.UsualMemoryDevice">
-    <Position X="2.5" Y="2.75" Width="1.5" />
+    <Position X="3.25" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAAEAAAgAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>UsualMemoryDevice.cs</FileName>
+      <HashCode>QAAEAAAkAAAAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UMemDevice.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.1" />
   </Class>
   <Class Name="Proc.Pair&lt;TKey, TValue&gt;">
-    <Position X="4.75" Y="1.25" Width="1.5" />
+    <Position X="5" Y="2" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
       <FileName>Processor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Proc.Processor">
-    <Position X="8.5" Y="1.25" Width="1.5" />
+    <Position X="8.5" Y="2" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CAAAgAAAABSAAIAAAFAAAYEgAAFBAIAAAgAEAUAAAAQ=</HashCode>
       <FileName>Processor.cs</FileName>
@@ -47,17 +47,45 @@
     <Lollipop Position="0.2" />
   </Class>
   <Interface Name="Proc.IProccesor">
-    <Position X="10.5" Y="0.5" Width="1.5" />
+    <Position X="11" Y="6" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAgAAAAAAAAAAAABAAAAEAAAAAAAAAAAAAAUAAAAQ=</HashCode>
       <FileName>IProccesor.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="Proc.IMemoryDevice">
-    <Position X="0.5" Y="2.75" Width="1.5" />
+  <Interface Name="Proc.IMemoryDevice" Collapsed="true">
+    <Position X="12.75" Y="7.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QAAEAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IMemoryDevice.cs</FileName>
+      <FileName>IDevices.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Proc.IDevice">
+    <Position X="12.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IDevices.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Proc.IInputDevice" Collapsed="true">
+    <Position X="11.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IDevices.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Proc.IOutputDevice">
+    <Position X="14.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAA=</HashCode>
+      <FileName>IDevices.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Proc.IIODevice" Collapsed="true">
+    <Position X="12.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>IDevices.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Font Name="Segoe UI" Size="9" />

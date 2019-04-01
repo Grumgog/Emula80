@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Reflection;
 using Lexer;
-using Proc;
+using Processor;
 using System.Text.RegularExpressions;
+using System.Collections.ObjectModel;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows;
+using System.IO;
 
 namespace Proc
 {
-    public class SimpleTokenizer : ITokenizer
+    public class EmuTokenizer : ITokenizer
     {
         public Token Tokenize(string token)
         {
@@ -33,7 +39,7 @@ namespace Proc
         }
     }
 
-    public class SimpleDivider : ILexDivider
+    public class EmuDivider : ILexDivider
     {
         public bool IsDivide(char c)
         {
@@ -41,20 +47,170 @@ namespace Proc
         }
     }
 
+    public class RandomNumDevice : IInputDevice
+    {
+        Processor p;
+        Random r;
+        public RandomNumDevice(Processor processor)
+        {
+            p = processor;
+            r = new Random();
+        }
+
+        public int Addres => 42;
+
+        public void Input()
+        {
+            p.RegisterOfProcessor.ToList().Find(el => el.Key == "EAX").Value = r.Next();
+        }
+    }
+
+    public class OutPrinter : IOutputDevice
+    {
+        List<int> buffer;
+        public List<int> Buf { get => buffer; set => buffer = value; }
+
+        public int Addres => 55;
+        Processor Proc;
+        public OutPrinter(Processor p)
+        {
+            Proc = p;
+        }
+
+        public void Flush()
+        {
+            string outbuf = "";
+            foreach(var ch in Buf)
+            {
+                outbuf += (char)ch;
+            }
+
+            PrintDialog printDialog = new PrintDialog();
+            if (printDialog.ShowDialog() == true)
+            {
+                FlowDocument fd = new FlowDocument(); // Печатаем потоковый документ
+                Paragraph mainBlock = new Paragraph(); // У нас один параграф
+                mainBlock.Margin = new Thickness(0);
+                foreach(string line in outbuf.Split('\n')) // Заполняем параграф строками
+                {
+                    mainBlock.Inlines.Add(new Run(line));
+                }
+                fd.Blocks.Add(mainBlock);
+                DocumentPaginator paginator = ((IDocumentPaginatorSource)fd).DocumentPaginator; // получаем листы
+                printDialog.PrintDocument(paginator, "Printer OUTPUT"); // печатаем
+            }
+        }
+
+        public void Print()
+        {
+            Buf.Add(Proc.RegisterOfProcessor.ToList().Find(el => el.Key == "EBX").Value);
+            if (Proc.RegisterOfProcessor.ToList().Find(el => el.Key == "EAX").Value == 1)
+                Flush();
+        }
+    }
+
     public class VirtualMachine
     {
         static public List<string> operators = new List<string>{ "MOV", "PUSH", "ADD", "SUB", "MUL", "DIV", "STORE",
                                                                 "LOAD", "JMP", "CALL", "PROC", "ENDPROC", "EXCH", "CMP",
-                                                                "JGT", "JLT", "JEQ", "JGE", "JLE", "JNE"};
+                                                                "JGT", "JLT", "JEQ", "JGE", "JLE", "JNE", "IN", "OUT"};
         public Processor proc { get; set; }
+
+        public ObservableCollection<IInputDevice> InputDevices { get; set; }
+        public ObservableCollection<IOutputDevice> OutputDevices { get; set; }
 
         public VirtualMachine(Processor proccesor)
         {
             proc = proccesor;
+            InputDevices = new ObservableCollection<IInputDevice>();
+            OutputDevices = new ObservableCollection<IOutputDevice>();
+            // LoadDevices
+            LoadDevices();
+            
+
+            // StandartDevices
+            InputDevices.Add(new RandomNumDevice(proc));
+            OutputDevices.Add(new OutPrinter(proc));
+        }
+
+        private void LoadDevices()
+        {
+            string PluggableFolder = StandartSettings.PluggableDevicesFolderPath;
+
+            if (Directory.Exists(PluggableFolder))
+            {
+                if (Directory.Exists(StandartSettings.PluggableInputDevicesPath))
+                    LoadInputDevices();
+                else
+                    _createSubInput();
+
+                if (Directory.Exists(StandartSettings.PluggableOutputDevicesPath))
+                    LoadOutputDevices();
+                else
+                    _createSubInput();
+            }
+            else
+                _createSubFolder();
         }
 
         /// <summary>
-        /// Отдельный коди для совершения прыжков
+        /// Загружает устройства ввода в виртуальную машину
+        /// </summary>
+        private void LoadInputDevices()
+        {
+            DirectoryInfo inf = new DirectoryInfo(StandartSettings.PluggableInputDevicesPath);
+            var files = inf.GetFiles();
+            var assembles = from asm in files
+                            where (string.Compare(asm.Extension, ".EXE", true) == 0 || string.Compare(asm.Extension, ".DLL", true) == 0)
+                            select asm;
+            foreach(var asm in assembles)
+            {
+                Assembly assembly = Assembly.LoadFile(asm.FullName);
+                var types = assembly.GetTypes();
+                var inputtypes = from type in types
+                        where type.GetInterface("IInputDevice") != null
+                        select type;
+                inputtypes.ToList().ForEach(el => InputDevices.Add((IInputDevice)Activator.CreateInstance(el)));
+            }
+        }
+
+        /// <summary>
+        /// Загружает устройства вывода в виртуальную машину
+        /// </summary>
+        private void LoadOutputDevices()
+        {
+            DirectoryInfo inf = new DirectoryInfo(StandartSettings.PluggableOutputDevicesPath);
+            var files = inf.GetFiles();
+            var assembles = from asm in files
+                            where (string.Compare(asm.Extension, ".EXE", true) == 0 || string.Compare(asm.Extension, ".DLL", true) == 0)
+                            select asm;
+            foreach (var asm in assembles)
+            {
+                Assembly assembly = Assembly.LoadFile(asm.FullName);
+                var types = assembly.GetTypes();
+                var outputtypes = from type in types
+                                  where type.GetInterface("IOutputDevice") != null
+                                  select type;
+                outputtypes.ToList().ForEach(el => OutputDevices.Add((IOutputDevice)Activator.CreateInstance(el)));
+            }
+        }
+
+        /// <summary>
+        /// Создает поддиректорию для загрузки модулей устройств
+        /// </summary>
+        private void _createSubFolder()
+        {
+            Directory.CreateDirectory(StandartSettings.PluggableDevicesFolderPath);
+            _createSubInput();
+            _createSubOutput();
+        }
+
+        private void _createSubInput() => Directory.CreateDirectory(StandartSettings.PluggableInputDevicesPath);
+
+        private void _createSubOutput() => Directory.CreateDirectory(StandartSettings.PluggableOutputDevicesPath);
+
+        /// <summary>
+        /// Отдельный код для совершения прыжков
         /// </summary>
         /// <param name="stream">Поток токенов программы</param>
         /// <param name="pos">Позиция указателя на исполняемую инструкцию</param>
@@ -325,6 +481,34 @@ namespace Proc
 
                     }
                 }
+                else if(string.Compare(stream[i].Value, "IN", true) == 0)
+                {
+                    if(stream[i+1].Type == TokenType.DATA)
+                    {
+                        int adress = int.Parse(stream[i + 1].Value);
+                        InputDevices.ToList().Find(el => el.Addres == adress).Input();
+                    }
+                    else if(stream[i+1].Type == TokenType.REGISTR)
+                    {
+                        int adress = proc.RegisterOfProcessor.ToList().Find(el => el.Key == stream[i + 1].Value).Value;
+                        InputDevices.ToList().Find(el => el.Addres == adress).Input();
+                    }
+                    i += 2;
+                }
+                else if (string.Compare(stream[i].Value, "OUT", true) == 0)
+                {
+                    if (stream[i + 1].Type == TokenType.DATA)
+                    {
+                        int adress = int.Parse(stream[i + 1].Value);
+                        OutputDevices.ToList().Find(el => el.Addres == adress).Print();
+                    }
+                    else if (stream[i + 1].Type == TokenType.REGISTR)
+                    {
+                        int adress = proc.RegisterOfProcessor.ToList().Find(el => el.Key == stream[i + 1].Value).Value;
+                        OutputDevices.ToList().Find(el => el.Addres == adress).Print();
+                    }
+                    i += 2;
+                }
             }
             else if (stream[i].Type == TokenType.LABELTO)
             {
@@ -332,7 +516,7 @@ namespace Proc
                 i++;
             }
             else
-                throw new Exception("Сия комманда начинается не с оператора! Начните команду с оператора пожалуйста " + stream[i]);
+                throw new Exception("Комманда начинается не с оператора! Начните команду с оператора пожалуйста " + stream[i]);
 
             return i;
         }

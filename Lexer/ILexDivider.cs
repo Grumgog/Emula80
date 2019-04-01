@@ -7,9 +7,4 @@ namespace Lexer
     {
         bool IsDivide(char c);
     }
-
-    public interface ISynAn
-    {
-        bool IsCorrect(List<Token> stream);
-    }
 }
