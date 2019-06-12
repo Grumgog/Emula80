@@ -1,6 +1,4 @@
-﻿
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
 
 namespace Lexer
 {
@@ -62,9 +60,6 @@ namespace Lexer
             }
             return result;
         }
-
         public List<Token> Process(string text) => Tokenize(Divide(text));
-    }
-
-   
+    }  
 }

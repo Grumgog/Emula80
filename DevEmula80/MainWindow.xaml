@@ -60,7 +60,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <TextBox FontSize="14" TextWrapping="Wrap" Text="{Binding ProgramText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" ScrollViewer.HorizontalScrollBarVisibility ="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <TextBox FontSize="18" FontFamily="Consolas" TextWrapping="Wrap" Text="{Binding ProgramText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" ScrollViewer.HorizontalScrollBarVisibility ="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
                 
             </TextBox>
             <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
@@ -71,9 +71,9 @@
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <DockPanel>
-                                            <Label DockPanel.Dock="Left" Content="{Binding Key}"/>
-                                            <Label DockPanel.Dock="Left" Content=": "/>
-                                            <Label Content="{Binding Value}"/>
+                                            <Label FontFamily="Consolas" FontSize="18" DockPanel.Dock="Left" Content="{Binding Key}"/>
+                                            <Label FontFamily="Consolas" FontSize="18" DockPanel.Dock="Left" Content=":"/>
+                                            <Label FontFamily="Consolas" FontSize="18" Content="{Binding Value}"/>
                                         </DockPanel>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
@@ -91,7 +91,7 @@
             
             <GridSplitter Grid.Row="1" Grid.ColumnSpan="2" Height="5" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
             <GroupBox Grid.ColumnSpan="2" Grid.Row="2" MinHeight="125" Header="Сообщения программы">
-                <TextBox IsReadOnly="True" Text="{Binding RunMessage}" AcceptsReturn="True"  ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <TextBox FontSize="18" FontFamily="Consolas" MaxHeight="200" IsReadOnly="True" Text="{Binding RunMessage}" AcceptsReturn="True"  ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
                     
                 </TextBox>
             </GroupBox>

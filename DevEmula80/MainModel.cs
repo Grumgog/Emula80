@@ -211,7 +211,7 @@ namespace DevEmula80
                 } 
                 try
                 {
-                    executeThread = new ExecuteThread(VirtualMachine, Tokens, this);
+                    VirtualMachine.Execute(Tokens);
                 }
                 catch(Exception e)
                 {
@@ -244,7 +244,7 @@ namespace DevEmula80
                         return;
                     }
 
-                    RunMessage += Tokens[CommandPointer].ToString() + " выполняется\n";
+                    RunMessage = Tokens[CommandPointer].ToString() + " выполняется\n" + RunMessage;
                     CommandPointer = VirtualMachine.Step(Tokens, CommandPointer);
                     
                     OnPropertyChanged("RegMem");
@@ -252,7 +252,7 @@ namespace DevEmula80
                 }
                 catch(Exception e)
                 {
-                    RunMessage += e.Message;
+                    RunMessage = e.Message + RunMessage;
                     RunStop.execute(null);
                 }
             }, obj=>!AllExecute));
@@ -269,11 +269,11 @@ namespace DevEmula80
                 }
                 catch
                 {
-                    RunMessage += "Работа программы была завершенна принудительно\n";
+                    RunMessage = "Работа программы была завершенна принудительно\n" + RunMessage;
                 }
                 StepExecute = AllExecute = false;
                 CommandPointer = 0;
-                RunMessage += "Программа завершила выполнение\n";
+                RunMessage = "Программа завершила выполнение\n" + RunMessage;
             }, obj => StepExecute || AllExecute));
         }
         #endregion
@@ -397,7 +397,7 @@ namespace DevEmula80
             }
             catch(Exception e)
             {
-                m.RunMessage += e.Message; 
+                m.RunMessage = e.Message + m.RunMessage; 
                 //m.AbortProgramm(); // <- Добавить код для возращение в исходное состояние
             }
            

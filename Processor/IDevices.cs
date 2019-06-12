@@ -9,6 +9,7 @@ namespace Proc
     public interface IDevice
     {
         int Addres { get; } // адрес устройства в памяти
+        string Name { get; } // Имя устройства
     }
 
     

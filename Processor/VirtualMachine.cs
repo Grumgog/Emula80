@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows;
 using System.IO;
 
@@ -58,6 +57,7 @@ namespace Proc
         }
 
         public int Addres => 42;
+        public string Name => "Random Number Generator (In to EAX)";
 
         public void Input()
         {
@@ -71,10 +71,13 @@ namespace Proc
         public List<int> Buf { get => buffer; set => buffer = value; }
 
         public int Addres => 55;
+        public string Name => "Real Printer (input to EBX, Flush EAX=1)";
+
         Processor Proc;
         public OutPrinter(Processor p)
         {
             Proc = p;
+            buffer = new List<int>();
         }
 
         public void Flush()
@@ -500,12 +503,32 @@ namespace Proc
                     if (stream[i + 1].Type == TokenType.DATA)
                     {
                         int adress = int.Parse(stream[i + 1].Value);
-                        OutputDevices.ToList().Find(el => el.Addres == adress).Print();
+                        var Device = OutputDevices.ToList().Find(el => el.Addres == adress);
+                        if (Device == null)
+                        {
+                            string listDevices = string.Empty;
+                            foreach (var d in OutputDevices)
+                                listDevices += $"{d.Name} №{d.Addres}\n";
+                            throw new Exception($"Устройство вывода по адресу {adress} не найдено.\n" +
+                                $"Список доступных устройств: {listDevices}");
+                        }
+                        else
+                            Device.Print();
                     }
                     else if (stream[i + 1].Type == TokenType.REGISTR)
                     {
                         int adress = proc.RegisterOfProcessor.ToList().Find(el => el.Key == stream[i + 1].Value).Value;
-                        OutputDevices.ToList().Find(el => el.Addres == adress).Print();
+                        var Device = OutputDevices.ToList().Find(el => el.Addres == adress);
+                        if (Device == null)
+                        {
+                            string listDevices = string.Empty;
+                            foreach (var d in OutputDevices)
+                                listDevices += $"{d.Name} №{d.Addres}\n";
+                            throw new Exception($"Устройство вывода по адресу {adress} не найдено.\n" +
+                                $"Список доступных устройств: {listDevices}");
+                        }
+                        else
+                            Device.Print();
                     }
                     i += 2;
                 }

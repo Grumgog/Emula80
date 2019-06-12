@@ -1,7 +1,4 @@
-﻿
-using System.Collections.Generic;
-
-namespace Lexer
+﻿namespace Lexer
 {
     public interface ILexDivider
     {
