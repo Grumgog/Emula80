@@ -30,3 +30,4 @@ This solution contain 4 projects.
 4. ConsoleTest - Test project (nothing intresting)
 ## Documentation
 You may find documentation [here](https://grumgog.github.io/)
+ 
