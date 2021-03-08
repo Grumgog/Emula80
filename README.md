@@ -11,18 +11,22 @@ Emula80 это интерпретатор ассемлер подобного я
 4. ConsoleTest - тестовый проект
 ## Система расширений
 Emula80 поддерживает механизм расширений. Данный механизм предоставляет возможность интерпретатору загружать в память процесса DLL. DLL должен содержать класс с необходимым кодом. Благодаря механизму расширений Emula80 может взаимодействовать с "внешним миром". Так в коде уже объявлен класс для печати символов на принтер.
+## Документация 
+Документацию к проекту можно найти [тут](https://grumgog.github.io/).
 
 # Emula80
 Emula80 is asm-like interpreter. It can run programm written in "EmuLang" - simplified version of Intel x86 assembler.
 this programming language concentrate on arithmetic/logic unit. Language is turing completeness - has logic and "jump" operators.
 Emula80 is IDE for run Emulang programm and debug it.
-# Features
+## Features
 1. Simplified asm
 2. IDE for language
 3. Extension system
-# For programmers
+## For programmers
 This solution contain 4 projects.
 1. Emula80 - IDE for emulang.
 2. Lexer - lexical token analizator.
 3. Processor - model of processor and interpreterer core (virtual machine).
 4. ConsoleTest - Test project (nothing intresting)
+## Documentation
+You may find documentation [here](https://grumgog.github.io/)
